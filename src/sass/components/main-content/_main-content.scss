@@ -1,0 +1,18 @@
+.main-content {
+    position: relative;
+    margin: 0;
+    min-height: 100%;
+    padding-top: 100px;
+    background-color: #f5f7fa;
+}
+
+
+@media screen and (max-width: 767px) {
+    .main-content {
+        padding-top: 260px;
+    }
+
+    .nothings-found {
+        top: 260px;
+    }
+}
