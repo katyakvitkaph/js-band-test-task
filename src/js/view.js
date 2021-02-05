@@ -6,7 +6,6 @@ export default class View extends EventEmitter {
     this.formState = {
       nameOfMemberValue: '',
     };
-
     this.container = document.querySelector('.container');
     this.form = document.querySelector('.form');
     this.main = document.querySelector('.main-content');
@@ -35,8 +34,6 @@ export default class View extends EventEmitter {
       'change',
       this.onSelectNameMemberChange.bind(this),
     );
-
-
     this.addNoteBtn.addEventListener('click', this.openCreateModal.bind(this));
     this.createModalForm.addEventListener('submit', this.handleAdd.bind(this));
     this.cancelCreateBtn.addEventListener(
@@ -85,7 +82,6 @@ export default class View extends EventEmitter {
       this.closeCreateModal();
     }
   }
-
   createDOMElement(tag, dataAttribute, text, ...classes) {
     const element = document.createElement(tag);
     dataAttribute

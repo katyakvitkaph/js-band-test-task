@@ -13,7 +13,6 @@ export default class Model {
     if (isEmptyState) {
       this.filteredItems = this.items;
     }
-
     if (
       formState.nameOfMemberValue !== '' &&
       formState.nameOfMemberValue !== 'All members'

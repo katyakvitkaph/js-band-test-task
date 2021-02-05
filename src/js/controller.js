@@ -14,7 +14,6 @@ export default class Controller {
     this.view.on("edit-success", this.handleEditSuccess.bind(this));
 
   }
-
   handleFilter(formState) {
     this.model.filterItems(formState);
     this.model.filteredItems.length ?
