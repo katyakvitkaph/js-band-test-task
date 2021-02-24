@@ -78,15 +78,9 @@ customize it when you are ready for it.
 ## Project Structure
 
 
+
 ```
 js-band-test-task
-├─ .babelrc
-├─ .browserslistrc
-├─ .editorconfig
-├─ .gitignore
-├─ .prettierrc
-├─ .vscode
-│  └─ settings.json
 ├─ css
 │  ├─ main.css
 │  └─ main.css.map
@@ -105,6 +99,11 @@ js-band-test-task
 │  ├─ index.html
 │  ├─ index.js
 │  ├─ js
+│  │  ├─ classes
+│  │  │  ├─ Admin.js
+│  │  │  └─ User.js
+│  │  ├─ constants
+│  │  │  └─ collectionTypes.js
 │  │  ├─ controller.js
 │  │  ├─ model.js
 │  │  ├─ services
@@ -114,10 +113,11 @@ js-band-test-task
 │     ├─ base
 │     │  └─ _normalize.scss
 │     ├─ components
+│     │  ├─ buttons
+│     │  │  └─ _buttons.scss
 │     │  ├─ footer
 │     │  │  └─ _footer.scss
 │     │  ├─ form
-│     │  │  ├─ _create-btn.scss
 │     │  │  └─ _form.scss
 │     │  ├─ header
 │     │  │  └─ _header.scss
