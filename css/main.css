@@ -347,6 +347,7 @@ template {
   font-family: "Montserrat", sans-serif;
   font-weight: 400;
   font-size: 14px;
+  border-radius: 0 !important;
 }
 
 .container {
@@ -542,15 +543,14 @@ td {
   }
 }
 
-.create-btn {
+.common-btn {
   width: 120px;
   height: 40px;
-  background-color: #FFA500;
   font-size: 12px;
   border: 0;
+  border-radius: none !important;
   letter-spacing: 0px;
   line-height: 21px;
-  color: #ffffff;
   font-family: 'Montserrat';
   font-weight: 700;
   text-align: center;
@@ -558,9 +558,23 @@ td {
   cursor: pointer;
 }
 
-.create-btn:hover,
-.create-btn:focus {
+.create-btn {
+  background-color: #FFA500;
+  color: #ffffff;
+}
+
+.signout-btn {
+  background-color: #8A97A0;
+  color: #ffffff;
+}
+
+.create-btn:hover, .signout-btn:hover,
+.create-btn:focus, .signout-btn:focus {
   background-color: #000;
+}
+
+.buttons-section {
+  margin-right: 330px;
 }
 
 .main-content {
@@ -580,8 +594,24 @@ td {
   }
 }
 
-.backdrop,
-.backdrop--edit {
+.backdrop {
+  display: none;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 99999;
+}
+
+.backdrop-auth {
   display: none;
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -599,7 +629,7 @@ td {
 }
 
 .modal-window,
-.modal--edit {
+.modal-window-auth {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -669,21 +699,21 @@ td {
   cursor: pointer;
 }
 
-.dropdown-toggle {
-  background-color: #f5f7fa;
-  width: 100%;
-  border: 0;
-  border-radius: none;
-  color: #000;
-  outline: none;
+.dropdown-toggle, .dropdown-menu {
   width: 240px;
 }
 
-.multiselect-container {
-  width: 240px;
+#multiple-checkboxes .btn-group .multiselect .dropdown-toggle .btn .btn-default {
+  border: 0 !important;
 }
 
 .container.modal--show .backdrop {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.container.modal--auth--show .backdrop-auth {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -694,12 +724,6 @@ td {
   border-radius: none;
 }
 
-.btn-group b {
-  position: absolute;
-  top: 50%;
-  right: 2%;
-}
-
 .btn {
   text-align: left;
   border-radius: none !important;
@@ -707,6 +731,12 @@ td {
 
 .btn:hover {
   background-color: #f5f7fa;
+}
+
+.btn-group b {
+  position: absolute;
+  top: 50%;
+  right: 2%;
 }
 
 .item {

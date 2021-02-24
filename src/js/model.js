@@ -8,7 +8,6 @@ export default class Model {
   }
 
   filterItems(formState) {
-    console.log('formState', formState);
     const isEmptyState = Object.values(formState).every(el => el === '');
     if (isEmptyState) {
       this.filteredItems = this.items;
@@ -25,6 +24,8 @@ export default class Model {
 
     }
   }
+
+
 
   getItemsFromLS() {
     if (localStorage.items) {
@@ -89,26 +90,7 @@ export default class Model {
     return item;
   }
 
-  updateItem(id, note) {
-    const itemToUpdate = {
-      ...this.findItem(id),
-      ...note
-    };
-    this.items = this.items.map(item => (item.id === id ? itemToUpdate : item));
-  }
-
   deleteItem(id) {
-    console.log('id', id);
     this.items = this.items.filter(item => item.id !== id);
-  }
-
-  updateProgressStatus(id) {
-    const currentItem = this.findItem(id);
-    const newItem =
-      currentItem.progress === 'Open' ?
-      (currentItem.progress = 'Done') :
-      (currentItem.progress = 'Open');
-
-    this.items.forEach(item => (item.id === id ? newItem : item));
   }
 }
