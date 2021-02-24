@@ -178,7 +178,6 @@ export default class View extends EventEmitter {
     switch (selectedUserName) {
       case collectionTypes.ALEX:
         inst = new Admin(selectedUserName, true);
-        console.log('items', items);
         items.forEach(item => {
           item.style.display = 'block';
         })
@@ -212,7 +211,6 @@ export default class View extends EventEmitter {
   init(notes) {
     let isAdmin = true;
     isAdmin = localStorage.getItem('userRole');
-
     let cell = null;
     let cellsData = this.table.getElementsByTagName('td');
     for (let i = 0; i < cellsData.length; i++) {
