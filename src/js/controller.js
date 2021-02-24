@@ -9,9 +9,6 @@ export default class Controller {
     this.view.on("delete", this.deleteNote.bind(this));
     this.view.on("filter", this.handleFilter.bind(this));
     this.view.on("create-cancel", this.handleCreateCancel.bind(this));
-    this.view.on("edit-start", this.handleEditStart.bind(this));
-    this.view.on("edit-cancel", this.handleEditCancel.bind(this));
-    this.view.on("edit-success", this.handleEditSuccess.bind(this));
 
   }
   handleFilter(formState) {
@@ -27,29 +24,6 @@ export default class Controller {
     this.view.init(this.model.items);
   }
 
-
-  handleEditSuccess(note) {
-    const id = this.model.getSelectedItemId();
-    this.model.updateItem(id, note);
-    try {
-      localStorage.setItem("items", JSON.stringify(this.model.items));
-    } catch (e) {
-      console.error("Error while parsing.");
-    }
-    this.view.updateNote(id, note);
-  }
-
-  handleEditStart(id) {
-    console.log('id', id);
-    const note = this.model.findItem(id);
-    this.model.setSelectedItemId(id);
-
-    this.view.openEditModal(note);
-  }
-
-  handleEditCancel() {
-    this.view.closeEditModal();
-  }
 
   handleCreateCancel() {
     this.view.closeCreateModal();

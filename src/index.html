@@ -12,7 +12,7 @@
   <title>Calendar</title>
 </head>
 
-<body class="container">
+<body class="container modal--auth--show">
   <header class="header">
     <div class="header-container">
       <a href="#" class="logo"><img alt="MyToDo" width="50px" height="50px" src="./assets/icons/calendar.png" /></a>
@@ -24,9 +24,14 @@
           <option value="Alex">Alex</option>
           <option value="Kate">Kate</option>
         </select>
-        <button type="button" class="create-btn" data-action="add-note">
+        <div class='buttons-section'>
+        <button type="button" class="create-btn common-btn" data-action="add-note">
           New event
         </button>
+        <button type="button" class="signout-btn common-btn" data-action="signout">
+          Sign out 
+        </button>
+      </div>
       </form>
     </div>
   </header>
@@ -164,7 +169,30 @@
           </div>
         </form>
       </div>
+
+
     </div>
+    <div class="backdrop-auth">
+      <div class="modal-window-auth">
+        <form class="modal-form-auth">
+         <p class="modal-form__title">Please authorise:</p>
+         <select class="modal-form__select modal-form__select-name" name="name">
+            <option value="Helga">Helga</option>
+            <option value="Pablo">Pablo</option>
+            <option value="Alex">Alex</option>
+            <option value="Kate">Kate</option>
+          </select>
+          <div class="modal-form-actions">
+            <button type="submit" class="button" data-action="confirm">
+              Confirm
+            </button>
+           
+          </div>
+        </form>
+      </div>
+    </div>
+
+
     <footer class="footer">
       <div class="footer-container">
         Kateryna Kiriukhina

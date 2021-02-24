@@ -1,5 +1,17 @@
-.backdrop,
-.backdrop--edit {
+.backdrop {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 99999;
+}
+
+.backdrop-auth {
     display: none;
     align-items: center;
     justify-content: center;
@@ -13,7 +25,7 @@
 }
 
 .modal-window,
-.modal--edit {
+.modal-window-auth {
     display: flex;
     flex-direction: column;
     width: 300px;
@@ -75,31 +87,26 @@
     cursor: pointer;
 }
 
-.dropdown-toggle {
-    background-color: #f5f7fa;
-    width: 100%;
-    border: 0;
-    border-radius: none;
-    color: #000;
-    outline: none;
-    width: 240px;
-}
-.multiselect-container {
-    width: 240px;
+.dropdown-toggle, .dropdown-menu{
+        width: 240px;
     }
+
+#multiple-checkboxes .btn-group .multiselect .dropdown-toggle .btn .btn-default {
+    border: 0!important;
+}
     
 .container.modal--show .backdrop {
     display: flex;
 }
+.container.modal--auth--show .backdrop-auth {
+    display: flex;
+}
+
 .btn-group {
     margin-bottom: 10px;
     border-radius: none;
 }
-.btn-group b{ 
-    position: absolute;
-    top: 50%;
-    right: 2%;
-}
+
 
 .btn { 
     text-align: left;
@@ -108,3 +115,9 @@
 .btn:hover { 
     background-color: #f5f7fa;
 } 
+
+.btn-group b{ 
+    position: absolute;
+    top: 50%;
+    right: 2%;
+}
