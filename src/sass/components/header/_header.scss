@@ -17,6 +17,19 @@
     align-items: center;
 }
 
+.name-user {
+    position: absolute;
+    top: 4%;
+    display: inline-block;
+    left: 45%;
+    right: 50%;
+    width: fit-content;
+    font-size:30px;
+    font-weight: 700;
+    color: silver;
+    text-align: right;
+}
+
 @media screen and (max-width: 767px) {
     .header {
         padding-top: 20px;

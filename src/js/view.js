@@ -19,6 +19,7 @@ export default class View extends EventEmitter {
     this.createModalForm = this.modal.querySelector('.modal-form');
     this.addNoteBtn = document.querySelector('button[data-action="add-note"]');
     this.signoutBtn = document.querySelector('button[data-action="signout"]');
+    this.header = document.querySelector('.header-container');
     this.cancelCreateBtn = document.querySelector(
       'button[data-action="create-cancel"]',
     );
@@ -100,6 +101,18 @@ export default class View extends EventEmitter {
     return element;
   }
 
+  createGreetings(name) { 
+    const title = this.createDOMElement(
+      'h2',
+      null,
+      name,
+      'name-user',
+    );
+  
+
+    return title;
+
+  }
   createNote(note) {
     const section = this.createDOMElement(
       'section',
@@ -195,6 +208,7 @@ export default class View extends EventEmitter {
       default:
         return;
     }
+    this.header.append(this.createGreetings(`Hello, ${selectedUser.value}`))
     localStorage.setItem('userRole', inst._role);
 
     this.closeAuthModal();
