@@ -51,8 +51,6 @@ export default class View extends EventEmitter {
     this.emit('filter', this.formState);
   }
 
-
-
   onSelectNameMemberChange(e) {
     this.formState.nameOfMemberValue = e.target.value;
     this.emit('filter', this.formState);
@@ -77,9 +75,10 @@ export default class View extends EventEmitter {
       alert('Please, fill the field!');
     } else {
       const note = {
-        title: title.value.length > 15 ?
-          title.value.slice(0, 16) + '...' :
-          title.value,
+        title:
+          title.value.length > 15
+            ? title.value.slice(0, 16) + '...'
+            : title.value,
         dayOfWeek: dayOfWeek.value,
         time: time.value,
         name: selected,
@@ -93,25 +92,17 @@ export default class View extends EventEmitter {
   createDOMElement(tag, dataAttribute, text, ...classes) {
     const element = document.createElement(tag);
     dataAttribute
-      ?
-      (element.dataset[dataAttribute[0]] = dataAttribute[1]) :
-      null;
+      ? (element.dataset[dataAttribute[0]] = dataAttribute[1])
+      : null;
     text ? (element.textContent = text) : null;
     classes.forEach(className => element.classList.add(className));
     return element;
   }
 
-  createGreetings(name) { 
-    const title = this.createDOMElement(
-      'h2',
-      null,
-      name,
-      'name-user',
-    );
-  
+  createGreetings(name) {
+    const title = this.createDOMElement('h2', null, name, 'name-user');
 
     return title;
-
   }
   createNote(note) {
     const section = this.createDOMElement(
@@ -193,7 +184,7 @@ export default class View extends EventEmitter {
         inst = new Admin(selectedUserName, true);
         items.forEach(item => {
           item.style.display = 'block';
-        })
+        });
         break;
       case collectionTypes.HELGA:
       case collectionTypes.PABLO:
@@ -208,18 +199,15 @@ export default class View extends EventEmitter {
       default:
         return;
     }
-    this.header.append(this.createGreetings(`Hello, ${selectedUser.value}`))
+    this.header.append(this.createGreetings(`Hello, ${selectedUser.value}`));
     localStorage.setItem('userRole', inst._role);
 
     this.closeAuthModal();
   }
 
   signOut() {
-    localStorage.removeItem("userRole");
+    localStorage.removeItem('userRole');
     location.reload();
-
-
-
   }
 
   init(notes) {
@@ -240,10 +228,10 @@ export default class View extends EventEmitter {
 
     const items = this.table.querySelectorAll('button[data-action="delete"]');
 
-    isAdmin !== 'true' && items.forEach(item => {
-      item.style.display = 'none';
-    })
-
+    isAdmin !== 'true' &&
+      items.forEach(item => {
+        item.style.display = 'none';
+      });
   }
 
   nothingsFound() {
