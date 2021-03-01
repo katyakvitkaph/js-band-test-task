@@ -5,9 +5,6 @@ import collectionTypes from './constants/collectionTypes';
 import shortid from "shortid";
 import ServiceAPI from './services/index';
 
-
-
-
 const service = new ServiceAPI();
 export default class View extends EventEmitter {
   constructor() {
@@ -52,11 +49,7 @@ export default class View extends EventEmitter {
       this.closeCreateModal.bind(this),
     );
     this.confirmUser.addEventListener('click', this.handleAuth.bind(this));
-  }
 
-  onInput(e) {
-    this.formState.inputValue = e.target.value;
-    this.emit('filter', this.formState);
   }
 
   onSelectNameMemberChange(e) {
@@ -224,9 +217,6 @@ export default class View extends EventEmitter {
     }
     this.header.append(this.createGreetings(`Hello, ${selectedUser.value}`));
     localStorage.setItem('userRole', inst._role);
-
-
-
     this.closeAuthModal();
 
   }
@@ -237,16 +227,13 @@ export default class View extends EventEmitter {
   }
 
   init(notes) {
-
     let isAdmin = true;
     isAdmin = localStorage.getItem('userRole');
-
     let cell = null;
     let cellsData = this.table.getElementsByTagName('td');
     for (let i = 0; i < cellsData.length; i++) {
       cellsData[i].innerHTML = '';
     }
-
     notes.forEach(note => {
       cell = this.table.rows[note.row + 1].cells[note.col + 1];
 
@@ -257,12 +244,11 @@ export default class View extends EventEmitter {
       }
     });
     const items = this.table.querySelectorAll('button[data-action="delete"]');
-
     isAdmin !== 'true' &&
       items.forEach(item => {
         item.style.display = 'none';
       });
-    // }
+
   }
 
   nothingsFound() {

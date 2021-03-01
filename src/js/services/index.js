@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 const baseURL = 'http://158.101.166.74:8080/api/data/kate_kiriukhina';
 
@@ -6,7 +5,7 @@ const baseURL = 'http://158.101.166.74:8080/api/data/kate_kiriukhina';
 export default class ServiceAPI {
   constructor() {
     this.server = baseURL;
-    this.axios= axios;
+    this.axios = axios;
   }
 
   async initUser(params) {
@@ -17,8 +16,6 @@ export default class ServiceAPI {
       throw new Error(error);
     }
   }
-
-  
   async getAllUsers() {
     try {
       let result = await this.axios.get(`${this.server}/users`);
@@ -40,17 +37,8 @@ export default class ServiceAPI {
   async getAllEvents() {
     try {
       let result = await this.axios.get(`${this.server}/events`);
-    
-      return result.data;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-  async getEventByID(id) {
-    try {
-      let result = await this.axios.get(`${this.server}/events/${id}`);
 
-      return result;
+      return result.data;
     } catch (error) {
       throw new Error(error);
     }
@@ -63,7 +51,4 @@ export default class ServiceAPI {
       throw new Error(error);
     }
   }
-
-
-
 }

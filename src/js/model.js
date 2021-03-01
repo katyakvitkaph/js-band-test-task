@@ -1,7 +1,6 @@
 import shortid from 'shortid';
 import ServiceAPI from './services/index';
 
-
 const service = new ServiceAPI();
 export default class Model {
   constructor(items = []) {
@@ -19,23 +18,22 @@ export default class Model {
       formState.nameOfMemberValue !== '' &&
       formState.nameOfMemberValue !== 'All members'
     ) {
-
-      this.filteredItems = this.filteredItems.filter(
-        item =>
-        item.name.filter(el => el === formState.nameOfMemberValue).join('')
+      this.filteredItems = this.filteredItems.filter(item =>
+        item.name.filter(el => el === formState.nameOfMemberValue).join(''),
       );
-
     }
   }
 
-  async getEvents(func1) {
+  async getEvents(callback) {
     await service.getAllEvents().then(result => {
-      let getObject ;
-      result && ( getObject = result.map(obj => JSON.parse(obj.data)).forEach(el => this.items.push(el)))
-      return this.items
-
+      let getObject;
+      result &&
+        (getObject = result
+          .map(obj => JSON.parse(obj.data))
+          .forEach(el => this.items.push(el)));
+      return this.items;
     });
-    func1()
+    callback();
   }
 
   findItem(id) {
@@ -50,12 +48,7 @@ export default class Model {
     return this.selectedItemId;
   }
 
-  addItem({
-    title,
-    name,
-    dayOfWeek,
-    time
-  }) {
+  addItem({ title, name, dayOfWeek, time }) {
     const timeOfDay = [
       '10:00',
       '11:00',
@@ -79,15 +72,13 @@ export default class Model {
       col: daysOfWeek.indexOf(dayOfWeek),
     };
 
-
     if (this.items !== null) {
       const checkTime = this.items.some(
         el => el.dayOfWeek === item.dayOfWeek && el.time === item.time,
       );
       !checkTime
-        ?
-        this.items.push(item) :
-        alert('Failed to create an event! Time slot is already booked');
+        ? this.items.push(item)
+        : alert('Failed to create an event! Time slot is already booked');
     }
 
     return item;
@@ -96,22 +87,18 @@ export default class Model {
   deleteItem(id) {
     let idObj;
     service.getAllEvents().then(result => {
-
-      let getArrayOfStrings = result.map(el => el.data).find(el => el.includes(id))
-      let getObj = result.filter(el => el.data === getArrayOfStrings).find(el => el.id)
-      idObj = getObj.id
+      let getArrayOfStrings = result
+        .map(el => el.data)
+        .find(el => el.includes(id));
+      let getObj = result
+        .filter(el => el.data === getArrayOfStrings)
+        .find(el => el.id);
+      idObj = getObj.id;
       service.deleteEvent(idObj).then(result => {
-
-        return
-      })
-      return
-
-    })
-
-
+        return;
+      });
+      return;
+    });
     this.items = this.items.filter(item => item.id !== id);
-
-
   }
-
 }
