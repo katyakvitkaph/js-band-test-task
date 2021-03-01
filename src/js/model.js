@@ -1,4 +1,6 @@
 import shortid from 'shortid';
+import { alert, success } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
 import ServiceAPI from './services/index';
 
 const service = new ServiceAPI();
@@ -25,13 +27,21 @@ export default class Model {
   }
 
   async getEvents(callback) {
-    await service.getAllEvents().then(result => {
+    await 
+    service.getAllEvents().then(result => {
       let getObject;
       result &&
         (getObject = result
           .map(obj => JSON.parse(obj.data))
           .forEach(el => this.items.push(el)));
+          
       return this.items;
+    })
+    success({
+      text: "Events loaded successfully!",
+      closerHover: false,
+      delay: 1000
+     
     });
     callback();
   }
@@ -94,7 +104,13 @@ export default class Model {
         .filter(el => el.data === getArrayOfStrings)
         .find(el => el.id);
       idObj = getObj.id;
-      service.deleteEvent(idObj).then(result => {
+      service.deleteEvent(idObj).then(() => {
+        success({
+          text: "Deleted.",
+          closerHover: false,
+          delay: 1000
+         
+        });
         return;
       });
       return;

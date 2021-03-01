@@ -1,4 +1,6 @@
 import ServiceAPI from './services/index';
+import {success, error } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
 
 const service = new ServiceAPI();
 export default class Controller {
@@ -14,7 +16,6 @@ export default class Controller {
   }
   handleFilter(formState) {
     this.model.filterItems(formState);
-    console.log('this.model.filteredItems', this.model.filteredItems);
     this.model.filteredItems.length ?
       this.view.init(this.model.filteredItems) :
       this.view.nothingsFound();
@@ -36,10 +37,22 @@ export default class Controller {
       service.addEvent({
         "data": JSON.stringify(this.model.addItem(note))
       }).then(result => {
+        success({
+          text: "Added new event.",
+          closerHover: false,
+          delay: 1000
+         
+        });
         return result.data
       });
     } catch (e) {
       console.error("Error while parsing.");
+      error({
+        text: "Erorr! The event hasn't been added!",
+        closerHover: false,
+        delay: 1000
+       
+      });
     }
     this.showAllNotes();
   }

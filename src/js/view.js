@@ -193,12 +193,13 @@ export default class View extends EventEmitter {
         service.initUser({
           "data": `${selectedUserName}`,
           "id": this.id
-        }).then(result => {
-          return result
-        });
-
-
-    });
+        }).then(() => {
+         return
+        }
+        );
+        
+    })
+    
 
     switch (selectedUserName) {
       case collectionTypes.ALEX:
