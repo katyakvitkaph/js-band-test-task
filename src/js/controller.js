@@ -34,7 +34,7 @@ export default class Controller {
   addNote(note) {
 
     try {
-      // localStorage.setItem("items", JSON.stringify(this.model.items));
+
       service.addEvent(   {"data" : JSON.stringify(this.model.addItem(note))}).then(result => {
 
      return result.data
@@ -46,15 +46,7 @@ export default class Controller {
   }
 
   deleteNote(id) {
-    console.log('id0 , id' , id);
     this.model.deleteItem(id);
-    try {
-      // localStorage.setItem("items", JSON.stringify(this.model.items));
-      service.deleteEvent(id ).then(result => {
-      });
-    } catch (e) {
-      console.error("Error while parsing.");
-    }
     this.view.deleteNote(id);
   }
 }

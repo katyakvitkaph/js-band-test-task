@@ -31,7 +31,7 @@ export default class ServiceAPI {
   async addEvent(params) {
     try {
       let result = await this.axios.post(`${this.server}/events`, params);
-      console.log('ADDED');
+
       return result;
     } catch (error) {
       throw new Error(error);
@@ -40,7 +40,7 @@ export default class ServiceAPI {
   async getAllEvents() {
     try {
       let result = await this.axios.get(`${this.server}/events`);
-      console.log('!RESULT' , result.data);
+    
       return result.data;
     } catch (error) {
       throw new Error(error);

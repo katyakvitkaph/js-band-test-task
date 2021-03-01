@@ -236,13 +236,8 @@ export default class View extends EventEmitter {
     location.reload();
   }
 
-  init(notes ) {
-    console.log('INIT');
-    console.log('notes', notes);
-    console.log('notes', notes.length);
-    // if(notes.length) {
-    // return
-    // } else {
+  init(notes) {
+
     let isAdmin = true;
     isAdmin = localStorage.getItem('userRole');
 
@@ -254,9 +249,9 @@ export default class View extends EventEmitter {
 
     notes.forEach(note => {
       cell = this.table.rows[note.row + 1].cells[note.col + 1];
-    
+
       const item = cell.getElementsByTagName('section');
-     
+
       if (item.length === 0) {
         cell.append(this.createNote(note));
       }

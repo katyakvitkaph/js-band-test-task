@@ -8,7 +8,6 @@ export default class Model {
     this.items = items;
     this.selectedItemId = null;
     this.filteredItems = [];
-    console.log('   this.items1', this.items);
   }
 
   filterItems(formState) {
@@ -30,25 +29,12 @@ export default class Model {
   }
 
   async getEvents(func1) {
-    console.log(' this.items getEvents1' ,  this.items); 
     await service.getAllEvents().then(result => {
-      
-      console.log('result' , result);
-      let getObject = result.map(obj =>JSON.parse( obj.data))
+      let getObject ;
+      result && ( getObject = result.map(obj => JSON.parse(obj.data)).forEach(el => this.items.push(el)))
+      return this.items
 
-      // let obj = JSON.parse(string);
-      // console.log('obj' , obj)
-      // for(let i = 0; i <= getObject.length) {
-      //   let uniqObj = this..some(el => el.id === this.items.id);
-      //   console.log('uniqObj', uniqObj);
-      // }
-       
-        // !uniqObj && this.items.push(string[i]);
-        getObject.forEach(el=> this.items.push(el))
-        return this.items
-      
     });
-    console.log('this.items!!2', this.items);
     func1()
   }
 
@@ -108,7 +94,24 @@ export default class Model {
   }
 
   deleteItem(id) {
-    console.log('this.items DELTE', this.items);
+    let idObj;
+    service.getAllEvents().then(result => {
+
+      let getArrayOfStrings = result.map(el => el.data).find(el => el.includes(id))
+      let getObj = result.filter(el => el.data === getArrayOfStrings).find(el => el.id)
+      idObj = getObj.id
+      service.deleteEvent(idObj).then(result => {
+
+        return
+      })
+      return
+
+    })
+
+
     this.items = this.items.filter(item => item.id !== id);
+
+
   }
+
 }
