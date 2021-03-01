@@ -1,9 +1,12 @@
+import { alert, notice, info, success, error } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
 import EventEmitter from './services/event-emitter';
 import User from './classes/User';
 import Admin from './classes/Admin';
 import collectionTypes from './constants/collectionTypes';
 import shortid from "shortid";
 import ServiceAPI from './services/index';
+
 
 const service = new ServiceAPI();
 export default class View extends EventEmitter {
@@ -73,7 +76,9 @@ export default class View extends EventEmitter {
       });
 
     if (!title.value) {
-      alert('Please, fill the field!');
+      notice({
+        text: "Please, fill the field!",
+      });
     } else {
       const note = {
         title: title.value.length > 15 ?
