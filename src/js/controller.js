@@ -1,18 +1,20 @@
+import ServiceAPI from './services/index';
+
+const service = new ServiceAPI();
 export default class Controller {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-
-    this.model.getItemsFromLS();
-    this.view.init(this.model.items);
     this.view.on("add", this.addNote.bind(this));
     this.view.on("delete", this.deleteNote.bind(this));
     this.view.on("filter", this.handleFilter.bind(this));
     this.view.on("create-cancel", this.handleCreateCancel.bind(this));
+    this.model.getEvents(() => this.view.init(this.model.items))
 
   }
   handleFilter(formState) {
     this.model.filterItems(formState);
+    console.log('this.model.filteredItems', this.model.filteredItems);
     this.model.filteredItems.length ?
       this.view.init(this.model.filteredItems) :
       this.view.nothingsFound();
@@ -30,9 +32,12 @@ export default class Controller {
   }
 
   addNote(note) {
-    this.model.addItem(note);
     try {
-      localStorage.setItem("items", JSON.stringify(this.model.items));
+      service.addEvent({
+        "data": JSON.stringify(this.model.addItem(note))
+      }).then(result => {
+        return result.data
+      });
     } catch (e) {
       console.error("Error while parsing.");
     }
@@ -41,11 +46,6 @@ export default class Controller {
 
   deleteNote(id) {
     this.model.deleteItem(id);
-    try {
-      localStorage.setItem("items", JSON.stringify(this.model.items));
-    } catch (e) {
-      console.error("Error while parsing.");
-    }
     this.view.deleteNote(id);
   }
 }

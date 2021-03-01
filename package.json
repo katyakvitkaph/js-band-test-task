@@ -46,6 +46,7 @@
     "webpackbar": "^4.0.0"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "core-js": "^3.8.3",
     "sass": "^1.32.5",
     "shortid": "^2.2.16"

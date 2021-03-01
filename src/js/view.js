@@ -2,13 +2,17 @@ import EventEmitter from './services/event-emitter';
 import User from './classes/User';
 import Admin from './classes/Admin';
 import collectionTypes from './constants/collectionTypes';
+import shortid from "shortid";
+import ServiceAPI from './services/index';
 
+const service = new ServiceAPI();
 export default class View extends EventEmitter {
   constructor() {
     super();
     this.formState = {
       nameOfMemberValue: '',
     };
+    this.id = shortid();
     this.container = document.querySelector('.container');
     this.authModal = document.querySelector('.modal-window-auth');
     this.confirmUser = document.querySelector('button[data-action="confirm"]');
@@ -20,6 +24,7 @@ export default class View extends EventEmitter {
     this.addNoteBtn = document.querySelector('button[data-action="add-note"]');
     this.signoutBtn = document.querySelector('button[data-action="signout"]');
     this.header = document.querySelector('.header-container');
+
     this.cancelCreateBtn = document.querySelector(
       'button[data-action="create-cancel"]',
     );
@@ -44,11 +49,7 @@ export default class View extends EventEmitter {
       this.closeCreateModal.bind(this),
     );
     this.confirmUser.addEventListener('click', this.handleAuth.bind(this));
-  }
 
-  onInput(e) {
-    this.formState.inputValue = e.target.value;
-    this.emit('filter', this.formState);
   }
 
   onSelectNameMemberChange(e) {
@@ -75,10 +76,8 @@ export default class View extends EventEmitter {
       alert('Please, fill the field!');
     } else {
       const note = {
-        title:
-          title.value.length > 15
-            ? title.value.slice(0, 16) + '...'
-            : title.value,
+        title: title.value.length > 15 ?
+          title.value.slice(0, 16) + '...' : title.value,
         dayOfWeek: dayOfWeek.value,
         time: time.value,
         name: selected,
@@ -92,8 +91,9 @@ export default class View extends EventEmitter {
   createDOMElement(tag, dataAttribute, text, ...classes) {
     const element = document.createElement(tag);
     dataAttribute
-      ? (element.dataset[dataAttribute[0]] = dataAttribute[1])
-      : null;
+      ?
+      (element.dataset[dataAttribute[0]] = dataAttribute[1]) :
+      null;
     text ? (element.textContent = text) : null;
     classes.forEach(className => element.classList.add(className));
     return element;
@@ -172,12 +172,28 @@ export default class View extends EventEmitter {
   handleAuth(e) {
     e.preventDefault();
     let inst;
+
     const selectedUser = this.authModal.querySelector(
       '.modal-form__select-name',
     );
 
     let selectedUserName = selectedUser.value.toLowerCase();
     const items = this.table.querySelectorAll('button[data-action="delete"]');
+
+    let findUser;
+    service.getAllUsers().then(result => {
+      findUser = result.data.some(item => item.data === selectedUserName)
+
+      return !findUser &&
+        service.initUser({
+          "data": `${selectedUserName}`,
+          "id": this.id
+        }).then(result => {
+          return result
+        });
+
+
+    });
 
     switch (selectedUserName) {
       case collectionTypes.ALEX:
@@ -201,8 +217,8 @@ export default class View extends EventEmitter {
     }
     this.header.append(this.createGreetings(`Hello, ${selectedUser.value}`));
     localStorage.setItem('userRole', inst._role);
-
     this.closeAuthModal();
+
   }
 
   signOut() {
@@ -220,18 +236,19 @@ export default class View extends EventEmitter {
     }
     notes.forEach(note => {
       cell = this.table.rows[note.row + 1].cells[note.col + 1];
+
       const item = cell.getElementsByTagName('section');
+
       if (item.length === 0) {
         cell.append(this.createNote(note));
       }
     });
-
     const items = this.table.querySelectorAll('button[data-action="delete"]');
-
     isAdmin !== 'true' &&
       items.forEach(item => {
         item.style.display = 'none';
       });
+
   }
 
   nothingsFound() {
