@@ -1,3 +1,6 @@
+
+import { alert, success, error } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
 import EventEmitter from './services/event-emitter';
 import collectionTypes from './constants/collectionTypes';
 import UserFactory from './classes/UserFactory';

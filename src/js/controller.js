@@ -7,12 +7,13 @@ export default class Controller {
     this.model = model;
     this.view = view;
     this.model.initUser()
+    this.model.getEvents(() => this.view.init(this.model.items))
     EVENT_EMITTER.on("add", this.addNote.bind(this));
     EVENT_EMITTER.on("delete", this.deleteNote.bind(this));
     EVENT_EMITTER.on("filter", this.handleFilter.bind(this));
     EVENT_EMITTER.on("show-all", this.showAllNotes.bind(this));
     this.handleCreateCancel();
-    this.model.getEvents(() => this.view.init(this.model.items))
+
 
   }
   handleFilter(formState) {
@@ -33,8 +34,8 @@ export default class Controller {
     this.view.closeCreateModal();
   }
 
-  addNote(note) {
-    this.model.addItem(note)
+  addNote(event) {
+    this.model.addItem(event)
     this.showAllNotes();
   }
 

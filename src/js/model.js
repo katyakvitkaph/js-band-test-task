@@ -3,6 +3,7 @@ import { alert, success, error } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
 import users from '../users.json';
 import ServiceAPI from './services/service-api';
+import customDecorator from './helpers/decorator';
 
 const service = new ServiceAPI();
 
@@ -28,22 +29,16 @@ export default class Model {
     }
   }
 
+  @customDecorator
   async getEvents(callback) {
-    await service
-      .getAllEvents()
-      .then(result => {
-        result &&
-          (getObject = result
-            .map(obj => JSON.parse(obj.data))
-            .forEach(el => this.items.push(el)));
-        success({
-          text: 'Events loaded successfully!',
-          closerHover: false,
-          delay: 1000,
-        });
-        return this.items;
-      })
-      .catch();
+    this.items;
+    await service.getAllEvents().then(result => {
+      result &&
+        result
+          .map(obj => JSON.parse(obj.data))
+          .forEach(el => this.items.push(el));
+      return this.items;
+    });
 
     callback();
   }
@@ -60,6 +55,7 @@ export default class Model {
     return this.selectedItemId;
   }
 
+  @customDecorator
   addItem({ title, name, dayOfWeek, time }) {
     const timeOfDay = [
       '10:00',
@@ -83,39 +79,32 @@ export default class Model {
       row: timeOfDay.indexOf(time),
       col: daysOfWeek.indexOf(dayOfWeek),
     };
-
+    let checkTime;
     if (this.items !== null) {
-      const checkTime = this.items.some(
+      checkTime = this.items.some(
         el => el.dayOfWeek === item.dayOfWeek && el.time === item.time,
       );
-      !checkTime
-        ? this.items.push(item)
-        : alert('Failed to create an event! Time slot is already booked');
-    }
-    try {
-      service
-        .addEvent({
-          data: JSON.stringify(item),
-        })
-        .then(result => {
-          success({
-            text: 'Added new event.',
-            closerHover: false,
-            delay: 1000,
+      if (!checkTime) {
+        this.items.push(item);
+        service
+          .addEvent({
+            data: JSON.stringify(item),
+          })
+          .then(result => {
+            success({
+              text: 'Added new event.',
+              closerHover: false,
+              delay: 1000,
+            });
+            return result.data;
           });
-          return result.data;
-        });
-    } catch (e) {
-      console.error('Error while parsing.');
-      error({
-        text: "Erorr! The event hasn't been added!",
-        closerHover: false,
-        delay: 1000,
-      });
+      } else {
+        alert('Failed to create an event! Time slot is already booked');
+      }
     }
-    return item;
   }
 
+  @customDecorator
   initUser() {
     service.getAllUsers().then(result => {
       if (result.data === null) {
@@ -131,7 +120,7 @@ export default class Model {
       }
     });
   }
-
+  @customDecorator
   deleteItem(id) {
     let idObj;
     service.getAllEvents().then(result => {
