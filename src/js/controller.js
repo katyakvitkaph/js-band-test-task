@@ -1,16 +1,17 @@
-import ServiceAPI from './services/index';
-import {success, error } from '@pnotify/core';
-import '@pnotify/core/dist/PNotify.css';
+import EventEmitter from './services/event-emitter';
 
-const service = new ServiceAPI();
+const EVENT_EMITTER = new EventEmitter();
+
 export default class Controller {
   constructor(model, view) {
     this.model = model;
     this.view = view;
-    this.view.on("add", this.addNote.bind(this));
-    this.view.on("delete", this.deleteNote.bind(this));
-    this.view.on("filter", this.handleFilter.bind(this));
-    this.view.on("create-cancel", this.handleCreateCancel.bind(this));
+    this.model.initUser()
+    EVENT_EMITTER.on("add", this.addNote.bind(this));
+    EVENT_EMITTER.on("delete", this.deleteNote.bind(this));
+    EVENT_EMITTER.on("filter", this.handleFilter.bind(this));
+    EVENT_EMITTER.on("show-all", this.showAllNotes.bind(this));
+    this.handleCreateCancel();
     this.model.getEvents(() => this.view.init(this.model.items))
 
   }
@@ -24,7 +25,7 @@ export default class Controller {
   }
 
   showAllNotes() {
-    this.view.init(this.model.items);
+    EVENT_EMITTER.on("show-all", this.view.init(this.model.items));
   }
 
 
@@ -33,27 +34,7 @@ export default class Controller {
   }
 
   addNote(note) {
-    try {
-      service.addEvent({
-        "data": JSON.stringify(this.model.addItem(note))
-      }).then(result => {
-        success({
-          text: "Added new event.",
-          closerHover: false,
-          delay: 1000
-         
-        });
-        return result.data
-      });
-    } catch (e) {
-      console.error("Error while parsing.");
-      error({
-        text: "Erorr! The event hasn't been added!",
-        closerHover: false,
-        delay: 1000
-       
-      });
-    }
+    this.model.addItem(note)
     this.showAllNotes();
   }
 

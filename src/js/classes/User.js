@@ -4,11 +4,11 @@ export default class User {
       }
 
     get name() {
-        return this._name
+      return this._name
     }
 
     set name(newName) {
-        return this._name = newName
-    }
+      return this._name = newName
+  }
   }
   

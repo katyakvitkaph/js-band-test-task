@@ -1,9 +1,11 @@
 import shortid from 'shortid';
-import { alert, success } from '@pnotify/core';
+import { alert, success, error } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
-import ServiceAPI from './services/index';
+import users from '../users.json';
+import ServiceAPI from './services/service-api';
 
 const service = new ServiceAPI();
+
 export default class Model {
   constructor(items = []) {
     this.items = items;
@@ -27,22 +29,22 @@ export default class Model {
   }
 
   async getEvents(callback) {
-    await 
-    service.getAllEvents().then(result => {
-      let getObject;
-      result &&
-        (getObject = result
-          .map(obj => JSON.parse(obj.data))
-          .forEach(el => this.items.push(el)));
-          
-      return this.items;
-    })
-    success({
-      text: "Events loaded successfully!",
-      closerHover: false,
-      delay: 1000
-     
-    });
+    await service
+      .getAllEvents()
+      .then(result => {
+        result &&
+          (getObject = result
+            .map(obj => JSON.parse(obj.data))
+            .forEach(el => this.items.push(el)));
+        success({
+          text: 'Events loaded successfully!',
+          closerHover: false,
+          delay: 1000,
+        });
+        return this.items;
+      })
+      .catch();
+
     callback();
   }
 
@@ -90,8 +92,44 @@ export default class Model {
         ? this.items.push(item)
         : alert('Failed to create an event! Time slot is already booked');
     }
-
+    try {
+      service
+        .addEvent({
+          data: JSON.stringify(item),
+        })
+        .then(result => {
+          success({
+            text: 'Added new event.',
+            closerHover: false,
+            delay: 1000,
+          });
+          return result.data;
+        });
+    } catch (e) {
+      console.error('Error while parsing.');
+      error({
+        text: "Erorr! The event hasn't been added!",
+        closerHover: false,
+        delay: 1000,
+      });
+    }
     return item;
+  }
+
+  initUser() {
+    service.getAllUsers().then(result => {
+      if (result.data === null) {
+        for (let i = 0; i <= users.length; i += 1) {
+          service
+            .initUsers({
+              data: `${users[i].data}`,
+            })
+            .then(res => {
+              return res;
+            });
+        }
+      }
+    });
   }
 
   deleteItem(id) {
@@ -106,10 +144,9 @@ export default class Model {
       idObj = getObj.id;
       service.deleteEvent(idObj).then(() => {
         success({
-          text: "Deleted.",
+          text: 'Deleted.',
           closerHover: false,
-          delay: 1000
-         
+          delay: 1000,
         });
         return;
       });

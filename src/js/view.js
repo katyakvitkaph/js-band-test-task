@@ -1,23 +1,22 @@
-import { alert, notice, info, success, error } from '@pnotify/core';
-import '@pnotify/core/dist/PNotify.css';
 import EventEmitter from './services/event-emitter';
-import User from './classes/User';
-import Admin from './classes/Admin';
 import collectionTypes from './constants/collectionTypes';
-import shortid from "shortid";
-import ServiceAPI from './services/index';
+import UserFactory from './classes/UserFactory';
+import shortid from 'shortid';
+const EVENT_EMITTER = new EventEmitter();
 
-
-const service = new ServiceAPI();
-export default class View extends EventEmitter {
+export default class View {
   constructor() {
-    super();
     this.formState = {
       nameOfMemberValue: '',
+      isAdmin: false,
     };
+
     this.id = shortid();
     this.container = document.querySelector('.container');
     this.authModal = document.querySelector('.modal-window-auth');
+    this.selectedUser = this.authModal.querySelector(
+      '.modal-form__select-name',
+    );
     this.confirmUser = document.querySelector('button[data-action="confirm"]');
     this.form = document.querySelector('.form');
     this.main = document.querySelector('.main-content');
@@ -27,18 +26,16 @@ export default class View extends EventEmitter {
     this.addNoteBtn = document.querySelector('button[data-action="add-note"]');
     this.signoutBtn = document.querySelector('button[data-action="signout"]');
     this.header = document.querySelector('.header-container');
-
     this.cancelCreateBtn = document.querySelector(
       'button[data-action="create-cancel"]',
     );
-
     $(document).ready(function () {
       $('#multiple-checkboxes').multiselect({
         includeSelectAllOption: true,
       });
     });
-
     this.table = document.querySelector('table');
+
     this.container.addEventListener('click', this.toggleDropdown);
     this.signoutBtn.addEventListener('click', this.signOut.bind(this));
     this.selectNameMember.addEventListener(
@@ -52,12 +49,11 @@ export default class View extends EventEmitter {
       this.closeCreateModal.bind(this),
     );
     this.confirmUser.addEventListener('click', this.handleAuth.bind(this));
-
   }
 
   onSelectNameMemberChange(e) {
     this.formState.nameOfMemberValue = e.target.value;
-    this.emit('filter', this.formState);
+    EVENT_EMITTER.emit('filter', this.formState);
   }
 
   handleAdd(e) {
@@ -76,11 +72,11 @@ export default class View extends EventEmitter {
       });
 
     if (!title.value) {
-      notice({
-        text: "Please, fill the field!",
+      alert({
+        text: 'Please, fill the field!',
       });
     } else {
-      const note = {
+      const event = {
         title: title.value.length > 15 ?
           title.value.slice(0, 16) + '...' : title.value,
         dayOfWeek: dayOfWeek.value,
@@ -88,7 +84,7 @@ export default class View extends EventEmitter {
         name: selected,
       };
 
-      this.emit('add', note);
+      EVENT_EMITTER.emit('add', event);
       this.createModalForm.reset();
       this.closeCreateModal();
     }
@@ -140,11 +136,9 @@ export default class View extends EventEmitter {
     );
 
     buttonsContainer.append(buttonDelete);
-
     item.append(itemTitle, buttonsContainer);
     section.append(item);
     this.appendEventListners(section);
-
     return section;
   }
 
@@ -156,7 +150,7 @@ export default class View extends EventEmitter {
   handleDelete(e) {
     const parent = e.target.closest('.item');
     e.stopPropagation();
-    this.emit('delete', parent.dataset.id);
+    EVENT_EMITTER.emit('delete', parent.dataset.id);
   }
 
   deleteNote(id) {
@@ -174,36 +168,22 @@ export default class View extends EventEmitter {
   closeAuthModal() {
     this.container.classList.remove('modal--auth--show');
   }
+
   handleAuth(e) {
     e.preventDefault();
-    let inst;
 
     const selectedUser = this.authModal.querySelector(
       '.modal-form__select-name',
     );
-
     let selectedUserName = selectedUser.value.toLowerCase();
     const items = this.table.querySelectorAll('button[data-action="delete"]');
 
-    let findUser;
-    service.getAllUsers().then(result => {
-      findUser = result.data.some(item => item.data === selectedUserName)
-
-      return !findUser &&
-        service.initUser({
-          "data": `${selectedUserName}`,
-          "id": this.id
-        }).then(() => {
-         return
-        }
-        );
-        
-    })
-    
-
     switch (selectedUserName) {
       case collectionTypes.ALEX:
-        inst = new Admin(selectedUserName, true);
+        this.formState.isAdmin = UserFactory.create(selectedUserName, {
+          name: `${selectedUser.value}`,
+          role: true,
+        });
         items.forEach(item => {
           item.style.display = 'block';
         });
@@ -211,20 +191,18 @@ export default class View extends EventEmitter {
       case collectionTypes.HELGA:
       case collectionTypes.PABLO:
       case collectionTypes.KATE:
-        inst = new User(selectedUserName);
+        UserFactory.create(selectedUserName, `${selectedUser.value}`);
         this.addNoteBtn.style.display = 'none';
         items.forEach(item => {
           item.style.display = 'none';
         });
-
         break;
       default:
         return;
     }
-    this.header.append(this.createGreetings(`Hello, ${selectedUser.value}`));
-    localStorage.setItem('userRole', inst._role);
-    this.closeAuthModal();
 
+    this.header.append(this.createGreetings(`Hello, ${selectedUser.value}`));
+    this.closeAuthModal();
   }
 
   signOut() {
@@ -233,8 +211,6 @@ export default class View extends EventEmitter {
   }
 
   init(notes) {
-    let isAdmin = true;
-    isAdmin = localStorage.getItem('userRole');
     let cell = null;
     let cellsData = this.table.getElementsByTagName('td');
     for (let i = 0; i < cellsData.length; i++) {
@@ -242,19 +218,16 @@ export default class View extends EventEmitter {
     }
     notes.forEach(note => {
       cell = this.table.rows[note.row + 1].cells[note.col + 1];
-
       const item = cell.getElementsByTagName('section');
-
       if (item.length === 0) {
         cell.append(this.createNote(note));
       }
     });
     const items = this.table.querySelectorAll('button[data-action="delete"]');
-    isAdmin !== 'true' &&
+    !this.formState.isAdmin &&
       items.forEach(item => {
         item.style.display = 'none';
       });
-
   }
 
   nothingsFound() {
