@@ -1,4 +1,4 @@
-import EventEmitter from './services/event-emitter';
+import EventEmitter from './services/EventEmitter';
 
 const EVENT_EMITTER = new EventEmitter();
 
