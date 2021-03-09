@@ -1,7 +1,6 @@
-
-import { alert, success, error } from '@pnotify/core';
+import { alert } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
-import EventEmitter from './services/event-emitter';
+import EventEmitter from './services/EventEmitter';
 import collectionTypes from './constants/collectionTypes';
 import UserFactory from './classes/UserFactory';
 import shortid from 'shortid';
@@ -80,8 +79,10 @@ export default class View {
       });
     } else {
       const event = {
-        title: title.value.length > 15 ?
-          title.value.slice(0, 16) + '...' : title.value,
+        title:
+          title.value.length > 15
+            ? title.value.slice(0, 16) + '...'
+            : title.value,
         dayOfWeek: dayOfWeek.value,
         time: time.value,
         name: selected,
@@ -95,9 +96,8 @@ export default class View {
   createDOMElement(tag, dataAttribute, text, ...classes) {
     const element = document.createElement(tag);
     dataAttribute
-      ?
-      (element.dataset[dataAttribute[0]] = dataAttribute[1]) :
-      null;
+      ? (element.dataset[dataAttribute[0]] = dataAttribute[1])
+      : null;
     text ? (element.textContent = text) : null;
     classes.forEach(className => element.classList.add(className));
     return element;

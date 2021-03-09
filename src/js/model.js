@@ -2,7 +2,7 @@ import shortid from 'shortid';
 import { alert, success, error } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
 import users from '../users.json';
-import ServiceAPI from './services/service-api';
+import ServiceAPI from './services/ServiceAPI';
 import customDecorator from './helpers/decorator';
 
 const service = new ServiceAPI();

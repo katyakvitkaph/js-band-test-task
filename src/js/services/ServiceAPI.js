@@ -6,6 +6,8 @@ export default class ServiceAPI {
   constructor() {
     this.server = baseURL;
     this.axios = axios;
+
+    ServiceAPI.instance = this;
   }
 
   async initUsers(params) {
